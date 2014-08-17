@@ -24,11 +24,6 @@ namespace accessor {
     template <typename T>
     class getset {
         T value;
-
-        static constexpr bool nothrow_move =
-            std::is_nothrow_move_constructible<T>::value;
-        static constexpr bool nothrow_copy =
-            std::is_nothrow_copy_constructible<T>::value;
     public:
         getset()                = default;
         getset(const getset& v) = default;
@@ -40,15 +35,11 @@ namespace accessor {
 
         template <typename U, typename = typename std::enable_if<
             !intern::is_private_base_of<U, getset<T>>::value, void>::type>
-        constexpr getset(U&& v)
-        noexcept((std::is_lvalue_reference<U&&>::value && nothrow_copy) ||
-                 (std::is_rvalue_reference<U&&>::value && nothrow_move))
+        constexpr getset(U&& v) noexcept(noexcept(T(std::forward<U>(v))))
         : value{std::forward<U>(v)} {}
 
         template <typename U>
-        /* constexpr c++14 */ void operator()(U&& v)
-        noexcept((std::is_lvalue_reference<U&&>::value && nothrow_copy) ||
-                 (std::is_rvalue_reference<U&&>::value && nothrow_move))
+        void operator()(U&& v) noexcept(noexcept(value = std::forward<U>(v)))
         {
             value = std::forward<U>(v); 
         }
@@ -65,7 +56,7 @@ namespace accessor {
 
         template <typename U>
         /* constexpr c++14 */ void operator()(U&& v)
-        noexcept(noexcept(getset<T>::operator()(std::forward<U>(v))))
+        noexcept(noexcept(getset<T>{}(std::forward<U>(v))))
         {
             getset<T>::operator()(std::forward<U>(v));
         }
@@ -100,10 +91,8 @@ namespace accessor {
         struct has_private_base {
             typedef char yes;
             typedef char (&no)[2];
-            template <typename U>
-            static yes test( typename U::private_base* p );
-            template <typename U>
-            static no test( ... );
+            template <typename U> static yes test( typename U::private_base* p );
+            template <typename U> static no  test( ... );
 
             static const bool value = sizeof( test<T>(0) ) == sizeof(yes);
         };
