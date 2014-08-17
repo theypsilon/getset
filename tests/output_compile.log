@@ -1,0 +1,118 @@
+
+TEST_SUCCESS_GETSET_INT
+TEST_SUCCESS_GETSET_STRING
+TEST_SUCCESS_GETSET_CONSTRUCTION
+TEST_SUCCESS_GETTER
+TEST_SUCCESS_SETTER
+TEST_FAIL_GETSET_COPY_ASSIGN
+compile.cpp: In function ‘void run(int)’:
+compile.cpp:128:11: error: use of deleted function ‘accessor::getset<T>& accessor::getset<T>::operator=(const accessor::getset<T>&) [with T = int]’
+         a = b;
+           ^
+In file included from compile.cpp:1:0:
+../getset.hpp:33:17: error: declared here
+         getset& operator=(const getset&) = delete;
+                 ^
+TEST_FAIL_GETSET_MOVE_ASSIGN
+compile.cpp: In function ‘void run(int)’:
+compile.cpp:136:11: error: use of deleted function ‘accessor::getset<T>& accessor::getset<T>::operator=(accessor::getset<T>&&) [with T = int]’
+         a = std::move(b);
+           ^
+In file included from compile.cpp:1:0:
+../getset.hpp:34:17: error: declared here
+         getset& operator=(getset&&)      = delete;
+                 ^
+TEST_FAIL_GETTER_COPY_ASSIGN
+compile.cpp: In function ‘void run(int)’:
+compile.cpp:144:11: error: use of deleted function ‘accessor::getter<int>& accessor::getter<int>::operator=(const accessor::getter<int>&)’
+         a = b;
+           ^
+In file included from compile.cpp:1:0:
+../getset.hpp:55:11: note: ‘accessor::getter<int>& accessor::getter<int>::operator=(const accessor::getter<int>&)’ is implicitly deleted because the default definition would be ill-formed:
+     class getter : private getset<T> {
+           ^
+../getset.hpp:55:11: error: use of deleted function ‘accessor::getset<T>& accessor::getset<T>::operator=(const accessor::getset<T>&) [with T = int]’
+../getset.hpp:33:17: error: declared here
+         getset& operator=(const getset&) = delete;
+                 ^
+TEST_FAIL_GETTER_MOVE_ASSIGN
+compile.cpp: In function ‘void run(int)’:
+compile.cpp:152:11: error: use of deleted function ‘accessor::getter<int>& accessor::getter<int>::operator=(accessor::getter<int>&&)’
+         a = std::move(b);
+           ^
+In file included from compile.cpp:1:0:
+../getset.hpp:55:11: note: ‘accessor::getter<int>& accessor::getter<int>::operator=(accessor::getter<int>&&)’ is implicitly deleted because the default definition would be ill-formed:
+     class getter : private getset<T> {
+           ^
+../getset.hpp:55:11: error: use of deleted function ‘accessor::getset<T>& accessor::getset<T>::operator=(accessor::getset<T>&&) [with T = int]’
+../getset.hpp:34:17: error: declared here
+         getset& operator=(getset&&)      = delete;
+                 ^
+TEST_FAIL_SETTER_COPY_ASSIGN
+compile.cpp: In function ‘void run(int)’:
+compile.cpp:158:19: error: wrong number of template arguments (1, should be 2)
+         setter<int> a;
+                   ^
+In file included from compile.cpp:1:0:
+../getset.hpp:74:11: error: provided for ‘template<class T, class Friend> class accessor::setter’
+     class setter : private getset<T> {
+           ^
+compile.cpp:158:22: error: invalid type in declaration before ‘;’ token
+         setter<int> a;
+                      ^
+compile.cpp:159:19: error: wrong number of template arguments (1, should be 2)
+         setter<int> b;
+                   ^
+In file included from compile.cpp:1:0:
+../getset.hpp:74:11: error: provided for ‘template<class T, class Friend> class accessor::setter’
+     class setter : private getset<T> {
+           ^
+compile.cpp:159:22: error: invalid type in declaration before ‘;’ token
+         setter<int> b;
+                      ^
+TEST_FAIL_SETTER_MOVE_ASSIGN
+compile.cpp: In function ‘void run(int)’:
+compile.cpp:166:19: error: wrong number of template arguments (1, should be 2)
+         setter<int> a;
+                   ^
+In file included from compile.cpp:1:0:
+../getset.hpp:74:11: error: provided for ‘template<class T, class Friend> class accessor::setter’
+     class setter : private getset<T> {
+           ^
+compile.cpp:166:22: error: invalid type in declaration before ‘;’ token
+         setter<int> a;
+                      ^
+compile.cpp:167:19: error: wrong number of template arguments (1, should be 2)
+         setter<int> b;
+                   ^
+In file included from compile.cpp:1:0:
+../getset.hpp:74:11: error: provided for ‘template<class T, class Friend> class accessor::setter’
+     class setter : private getset<T> {
+           ^
+compile.cpp:167:22: error: invalid type in declaration before ‘;’ token
+         setter<int> b;
+                      ^
+TEST_FAIL_GETTER_SET
+In file included from compile.cpp:1:0:
+../getset.hpp: In function ‘void run(int)’:
+../getset.hpp:58:36: error: ‘void accessor::getter<T, Friend>::operator()(U&&) [with U = int; T = int; Friend = void]’ is private
+         /* constexpr c++14 */ void operator()(U&& v)
+                                    ^
+compile.cpp:175:12: error: within this context
+         a(3);
+            ^
+TEST_FAIL_SETTER_GET
+compile.cpp: In function ‘void run(int)’:
+compile.cpp:181:19: error: wrong number of template arguments (1, should be 2)
+         setter<int> a;
+                   ^
+In file included from compile.cpp:1:0:
+../getset.hpp:74:11: error: provided for ‘template<class T, class Friend> class accessor::setter’
+     class setter : private getset<T> {
+           ^
+compile.cpp:181:22: error: invalid type in declaration before ‘;’ token
+         setter<int> a;
+                      ^
+compile.cpp:182:11: error: ‘a’ cannot be used as a function
+         a();
+           ^
