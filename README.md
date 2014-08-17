@@ -1,4 +1,4 @@
-getset
+getset.hpp [![Build Status](https://travis-ci.org/theypsilon/getset.svg?branch=master)](https://travis-ci.org/theypsilon/getset)
 ======
 
 ```cpp
