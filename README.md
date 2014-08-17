@@ -19,6 +19,8 @@ int main() {
     std::cout << x.a() << x.b() << x.c() << std::endl;
     return 0;
 }
+
+/* output: "Hello World." */
 ```
 
 Just add this simple template to your types and you will have a getter & setter interface that eventually you will be able to modify in the future without any modification in client code. 
